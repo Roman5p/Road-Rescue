@@ -4,99 +4,115 @@
 
 @section('main-section')
 
-<style>
-    #map {
-        width: 100%;
-        height: 400px;
-        background-color: #f0f0f0;
-    }
+    <link href="{{ asset('source/css/map.css') }}" rel="stylesheet">
 
-    .location-info {
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-    }
+    <div class="container-fluid p-0">
+        <!-- Map Section -->
+        <div id="map" style="height: 400px;"></div>
 
-    .location-info p {
-        margin: 0;
-        font-size: 16px;
-    }
+        <!-- Location Info -->
+        <div class="location-info">
+            <p><i class="fas fa-map-marker-alt"></i> <span id="location-name">Getting location...</span></p>
+        </div>
 
-    .location-info a {
-        font-size: 14px;
-    }
+        <!-- Include Google Maps JS (replace YOUR_API_KEY with your actual Google Maps API key) -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 
-    .warning-message {
-        padding: 15px;
-        background-color: #fff3cd;
-        border: 1px solid #ffeeba;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        font-size: 16px;
-    }
+        <script>
+            let map;
+            let marker;
 
-    .service-item {
-        padding: 10px;
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-    }
+            function initMap() {
+                // Initialize map with default coordinates (will be updated with current location)
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: 28.2096,
+                        lng: 83.9856
+                    }, // Default to Pokhara
+                    zoom: 13
+                });
 
-    .service-item i {
-        margin-right: 10px;
-    }
+                // Create marker
+                marker = new google.maps.Marker({
+                    position: {
+                        lat: 28.2096,
+                        lng: 83.9856
+                    },
+                    map: map
+                });
 
-    .continue-btn {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+                // Get current location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
 
-    .continue-btn:hover {
-        background-color: #0056b3;
-    }
-</style>
+                            // Update map center and marker
+                            map.setCenter(pos);
+                            marker.setPosition(pos);
 
-<div class="container-fluid p-0">
-    <!-- Map Section -->
-    <div id="map"></div>
+                            // Reverse geocode to get location name
+                            const geocoder = new google.maps.Geocoder();
+                            geocoder.geocode({
+                                location: pos
+                            }, function(results, status) {
+                                if (status === 'OK' && results[0]) {
+                                    const locationName = results[0].formatted_address;
+                                    document.getElementById('location-name').textContent = locationName;
+                                    marker.setTitle(locationName);
+                                    // Add info window
+                                    const infowindow = new google.maps.InfoWindow({
+                                        content: locationName
+                                    });
+                                    infowindow.open(map, marker);
+                                } else {
+                                    document.getElementById('location-name').textContent =
+                                        'Location name unavailable';
+                                    console.error('Geocoder failed:', status);
+                                }
+                            });
+                        },
+                        function(error) {
+                            console.error('Error getting location:', error);
+                            document.getElementById('location-name').textContent = 'Pokhara, Gandaki Pradesh, 33700';
+                            marker.setTitle('Pokhara, Gandaki Pradesh, 33700');
+                        }
+                    );
+                } else {
+                    console.error('Geolocation not supported by this browser');
+                    document.getElementById('location-name').textContent = 'Pokhara, Gandaki Pradesh, 33700';
+                    marker.setTitle('Pokhara, Gandaki Pradesh, 33700');
+                }
+            }
+        </script>
 
-    <!-- Location Info -->
-    <div class="location-info">
-        <p><i class="fas fa-map-marker-alt"></i> {{ $location ?? 'Pokhara, Gandaki Pradesh, 33700' }}</p>
-        <a href="#" class="text-primary float-end">EDIT</a>
+        <!-- Main Content -->
+        <div class="container mt-4">
+            <h2 class="mb-3">What help do you need?</h2>
+
+            <!-- Warning Message -->
+            <div class="warning-message">
+                <i class="fas fa-exclamation-circle"></i> No services available<br>
+                Unfortunately, there are no services available at this location.
+            </div>
+
+            <!-- Service List -->
+            <p class="text-muted mb-3">Currently not available</p>
+            <div class="service-item">
+                <i class="fas fa-tools"></i>
+                <span>Service 1</span>
+            </div>
+            <div class="service-item">
+                <i class="fas fa-car"></i>
+                <span>Service 2</span>
+            </div>
+
+            <!-- Continue Button -->
+            <button class="continue-btn mt-3">Continue <i class="fas fa-arrow-right ms-2"></i></button>
+        </div>
     </div>
-
-    <!-- Main Content -->
-    <div class="container mt-4">
-        <h2 class="mb-3">What help do you need?</h2>
-
-        <!-- Warning Message -->
-        <div class="warning-message">
-            <i class="fas fa-exclamation-circle"></i> No services available<br>
-            Unfortunately, there are no services available at this location.
-        </div>
-
-        <!-- Service List -->
-        <p class="text-muted mb-3">Currently not available</p>
-        <div class="service-item">
-            <i class="fas fa-tools"></i>
-            <span>Service 1</span>
-        </div>
-        <div class="service-item">
-            <i class="fas fa-car"></i>
-            <span>Service 2</span>
-        </div>
-
-        <!-- Continue Button -->
-        <button class="continue-btn mt-3">Continue <i class="fas fa-arrow-right ms-2"></i></button>
-    </div>
-</div>
 
 @endsection

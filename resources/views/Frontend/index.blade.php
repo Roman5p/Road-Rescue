@@ -78,42 +78,42 @@
             <!-- Flat Tire -->
             <div class="col-md-4 col-sm-6">
                 <div class="service-card">
-                    <img src="{{asset('source/img/tyre.jpeg')}}" alt="Flat Tire Icon">
+                    <img src="{{ asset('source/img/tyre.jpeg') }}" alt="Flat Tire Icon" class="rounded-circle mb-3">
                     <button class="btn">Flat Tire</button>
                 </div>
             </div>
             <!-- Won't Start -->
             <div class="col-md-4 col-sm-6">
                 <div class="service-card">
-                    <img src="" alt="Won't Start Icon">
+                    <img src="{{asset('source/img/bat.webp')}}" alt="Won't Start Icon" class="rounded-circle mb-3">
                     <button class="btn">Won't Start</button>
                 </div>
             </div>
             <!-- Locked Out -->
             <div class="col-md-4 col-sm-6">
                 <div class="service-card">
-                    <img src="" alt="Locked Out Icon">
+                    <img src="{{asset('source/img/locked.png')}}" alt="Locked Out Icon" class="rounded-circle mb-3">
                     <button class="btn">Locked Out</button>
                 </div>
             </div>
             <!-- Out of Gas -->
             <div class="col-md-4 col-sm-6">
                 <div class="service-card">
-                    <img src="" alt="Out of Gas Icon">
+                    <img src="{{asset('source/img/fuel.jpg')}}" alt="Out of Gas Icon" class="rounded-circle mb-3">
                     <button class="btn">Out of Gas</button>
                 </div>
             </div>
             <!-- Basic Tow -->
             <div class="col-md-4 col-sm-6">
                 <div class="service-card">
-                    <img src="https://via.placeholder.com/80?text=Basic+Tow" alt="Basic Tow Icon">
+                    <img src="{{asset('source/img/tow.jpeg')}}" alt="Basic Tow Icon" class="rounded-circle mb-3">
                     <button class="btn">Basic Tow</button>
                 </div>
             </div>
             <!-- Stuck -->
             <div class="col-md-4 col-sm-6">
                 <div class="service-card">
-                    <img src="https://via.placeholder.com/80?text=Stuck" alt="Stuck Icon">
+                    <img src="{{asset('source/img/stuck.png')}}" alt="Stuck Icon" class="rounded-circle mb-3">
                     <button class="btn">Stuck</button>
                 </div>
             </div>
